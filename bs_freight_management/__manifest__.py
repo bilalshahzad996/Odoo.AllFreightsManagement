@@ -55,7 +55,8 @@ businesses:
         'views/res_config_settings_views.xml',
         'report/freight_shipment_report.xml',
     ],
-'images': ['static/description/icon.png'],
+    'images': ['static/description/icon.png'],
+    'images': ['static/description/banner.png'],
     'demo': [
         'demo/freight_demo.xml',
     ],
