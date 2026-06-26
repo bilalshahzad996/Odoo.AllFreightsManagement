@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ir_cron_freight_eta_notification" model="ir.cron">
+        <field name="name">Freight: Send ETA Approaching Notifications</field>
+        <field name="model_id" ref="freight_forwarding.model_freight_shipment"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_eta_notifications()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>

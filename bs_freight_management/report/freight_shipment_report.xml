@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Report action -->
+    <record id="action_report_freight_shipment" model="ir.actions.report">
+        <field name="name">Shipment / Job File</field>
+        <field name="model">freight.shipment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">freight_forwarding.report_freight_shipment_document</field>
+        <field name="report_file">freight_forwarding.report_freight_shipment_document</field>
+        <field name="print_report_name">'Shipment - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_freight_shipment"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Report wrapper -->
+    <template id="report_freight_shipment">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="freight_forwarding.report_freight_shipment_document"
+                   t-lang="doc.customer_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- Report document -->
+    <template id="report_freight_shipment_document">
+        <t t-call="web.external_layout">
+            <t t-set="doc" t-value="doc.with_context(lang=doc.customer_id.lang)"/>
+
+            <div class="page">
+
+                <!-- Title -->
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <h2>
+                            <span t-if="doc.shipment_type == 'import'">Import </span>
+                            <span t-else="">Export </span>
+                            Shipment
+                        </h2>
+                        <h3 class="text-muted"><t t-esc="doc.name"/></h3>
+                    </div>
+                    <div class="col-6 text-end">
+                        <span class="badge fs-6"
+                              t-attf-class="badge #{
+                                'bg-success' if doc.state == 'delivered' else
+                                'bg-info' if doc.state == 'in_transit' else
+                                'bg-warning' if doc.state in ('arrived','cleared') else
+                                'bg-secondary'}">
+                            <t t-esc="dict(doc._fields['state'].selection).get(doc.state)"/>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Parties -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <h5 class="border-bottom pb-1">Parties</h5>
+                    </div>
+                    <div class="col-4">
+                        <strong>Customer / Bill To</strong><br/>
+                        <span t-field="doc.customer_id"/>
+                    </div>
+                    <div class="col-4">
+                        <strong>Shipper</strong><br/>
+                        <span t-field="doc.shipper_id"/>
+                    </div>
+                    <div class="col-4">
+                        <strong>Consignee</strong><br/>
+                        <span t-field="doc.consignee_id"/>
+                    </div>
+                </div>
+
+                <!-- Routing & Schedule -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <h5 class="border-bottom pb-1">Routing &amp; Schedule</h5>
+                    </div>
+                    <div class="col-3">
+                        <strong>Transport Mode</strong><br/>
+                        <t t-esc="dict(doc._fields['transport_mode'].selection).get(doc.transport_mode)"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>Shipping Line / Carrier</strong><br/>
+                        <span t-field="doc.shipping_line_id"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>Origin Port (POL)</strong><br/>
+                        <span t-field="doc.origin_port_id"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>Destination Port (POD)</strong><br/>
+                        <span t-field="doc.destination_port_id"/>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3">
+                        <strong>ETD</strong><br/>
+                        <span t-field="doc.etd"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>ETA</strong><br/>
+                        <span t-field="doc.eta"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>Incoterms</strong><br/>
+                        <span t-field="doc.incoterm_id"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>Booking Date</strong><br/>
+                        <span t-field="doc.date_booked"/>
+                    </div>
+                </div>
+
+                <!-- Document Numbers -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <h5 class="border-bottom pb-1">Document Numbers</h5>
+                    </div>
+                    <div class="col-3">
+                        <strong>Master B/L</strong><br/>
+                        <t t-esc="doc.master_bl or '—'"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>House B/L</strong><br/>
+                        <t t-esc="doc.house_bl or '—'"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>Carrier Booking Ref</strong><br/>
+                        <t t-esc="doc.booking_ref or '—'"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>Customs Declaration No.</strong><br/>
+                        <t t-esc="doc.customs_declaration_no or '—'"/>
+                    </div>
+                </div>
+
+                <!-- Containers -->
+                <t t-if="doc.container_ids">
+                    <div class="row mb-1">
+                        <div class="col-12">
+                            <h5 class="border-bottom pb-1">Containers</h5>
+                        </div>
+                    </div>
+                    <table class="table table-sm table-bordered mb-3">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Container No.</th>
+                                <th>Type</th>
+                                <th>Seal No.</th>
+                                <th class="text-end">Pkgs</th>
+                                <th class="text-end">Weight (kg)</th>
+                                <th class="text-end">Volume (CBM)</th>
+                                <th>HS Code</th>
+                                <th>Commodity</th>
+                                <th>Origin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.container_ids" t-as="c">
+                                <tr>
+                                    <td><t t-esc="c.name"/></td>
+                                    <td><t t-esc="dict(c._fields['container_type'].selection).get(c.container_type, '')"/></td>
+                                    <td><t t-esc="c.seal_number or ''"/></td>
+                                    <td class="text-end"><t t-esc="c.package_count"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % c.gross_weight"/></td>
+                                    <td class="text-end"><t t-esc="'%.3f' % c.volume"/></td>
+                                    <td><t t-esc="c.hs_code or ''"/></td>
+                                    <td><t t-esc="c.commodity_description or ''"/></td>
+                                    <td><t t-esc="c.country_of_origin_id.name or ''"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot class="table-light">
+                            <tr>
+                                <td colspan="3"><strong>Totals</strong></td>
+                                <td class="text-end"><strong><t t-esc="sum(doc.container_ids.mapped('package_count'))"/></strong></td>
+                                <td class="text-end"><strong><t t-esc="'%.2f' % sum(doc.container_ids.mapped('gross_weight'))"/></strong></td>
+                                <td class="text-end"><strong><t t-esc="'%.3f' % sum(doc.container_ids.mapped('volume'))"/></strong></td>
+                                <td colspan="3"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </t>
+
+                <!-- Charges -->
+                <t t-if="doc.charge_ids">
+                    <div class="row mb-1">
+                        <div class="col-12">
+                            <h5 class="border-bottom pb-1">Charges</h5>
+                        </div>
+                    </div>
+                    <table class="table table-sm table-bordered mb-3">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Charge Type</th>
+                                <th>Description</th>
+                                <th>Vendor</th>
+                                <th class="text-end">Amount</th>
+                                <th>Curr.</th>
+                                <th class="text-end">Amount (<t t-esc="doc.currency_id.name"/>)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.charge_ids" t-as="ch">
+                                <tr>
+                                    <td><t t-esc="ch.date"/></td>
+                                    <td><t t-esc="ch.charge_type_id.name"/></td>
+                                    <td><t t-esc="ch.name or ''"/></td>
+                                    <td><t t-esc="ch.partner_id.name or ''"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % ch.amount"/></td>
+                                    <td><t t-esc="ch.currency_id.name"/></td>
+                                    <td class="text-end"><t t-esc="'%.2f' % ch.amount_company"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot class="table-light">
+                            <tr>
+                                <td colspan="6" class="text-end"><strong>Total Charges</strong></td>
+                                <td class="text-end">
+                                    <strong>
+                                        <t t-esc="'%.2f' % doc.total_charges"/>
+                                        <t t-esc="' ' + doc.currency_id.name"/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </t>
+
+                <!-- Notes -->
+                <t t-if="doc.notes">
+                    <div class="row mb-1">
+                        <div class="col-12">
+                            <h5 class="border-bottom pb-1">Notes</h5>
+                            <div t-field="doc.notes"/>
+                        </div>
+                    </div>
+                </t>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>

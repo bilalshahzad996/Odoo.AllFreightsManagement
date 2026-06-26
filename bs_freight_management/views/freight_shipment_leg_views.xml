@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_freight_shipment_leg_list" model="ir.ui.view">
+        <field name="name">freight.shipment.leg.list</field>
+        <field name="model">freight.shipment.leg</field>
+        <field name="arch" type="xml">
+            <list string="Shipment Legs"
+                  decoration-info="status == 'in_transit'"
+                  decoration-success="status == 'arrived'">
+                <field name="shipment_id"/>
+                <field name="sequence" widget="handle"/>
+                <field name="leg_type"/>
+                <field name="origin_port_id"/>
+                <field name="destination_port_id"/>
+                <field name="shipping_line_id"/>
+                <field name="vessel_name"/>
+                <field name="voyage_no"/>
+                <field name="etd"/>
+                <field name="eta"/>
+                <field name="bl_number"/>
+                <field name="status" widget="badge"
+                       decoration-info="status == 'in_transit'"
+                       decoration-success="status == 'arrived'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_freight_shipment_leg_form" model="ir.ui.view">
+        <field name="name">freight.shipment.leg.form</field>
+        <field name="model">freight.shipment.leg</field>
+        <field name="arch" type="xml">
+            <form string="Shipment Leg">
+                <header>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="planned,in_transit,arrived"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Shipment">
+                            <field name="shipment_id"/>
+                            <field name="leg_type"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Carrier">
+                            <field name="shipping_line_id"/>
+                            <field name="vessel_name"/>
+                            <field name="voyage_no"/>
+                            <field name="bl_number"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Routing">
+                            <field name="origin_port_id"/>
+                            <field name="destination_port_id"/>
+                        </group>
+                        <group string="Schedule">
+                            <field name="etd"/>
+                            <field name="eta"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_freight_shipment_leg_search" model="ir.ui.view">
+        <field name="name">freight.shipment.leg.search</field>
+        <field name="model">freight.shipment.leg</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="shipment_id"/>
+                <field name="shipping_line_id"/>
+                <field name="origin_port_id"/>
+                <field name="destination_port_id"/>
+                <field name="vessel_name"/>
+                <field name="bl_number"/>
+                <separator/>
+                <filter name="in_transit" string="In Transit"
+                        domain="[('status', '=', 'in_transit')]"/>
+                <filter name="arrived" string="Arrived"
+                        domain="[('status', '=', 'arrived')]"/>
+                <group>
+                    <filter name="group_status" string="Status"
+                            context="{'group_by': 'status'}"/>
+                    <filter name="group_leg_type" string="Mode"
+                            context="{'group_by': 'leg_type'}"/>
+                    <filter name="group_carrier" string="Carrier"
+                            context="{'group_by': 'shipping_line_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_freight_shipment_leg" model="ir.actions.act_window">
+        <field name="name">Shipment Legs</field>
+        <field name="res_model">freight.shipment.leg</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_freight_shipment_leg_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No shipment legs yet
+            </p>
+            <p>
+                Add legs to a shipment to track multi-leg transshipment routes.
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,910 @@
+<title>Supply Chain & Freight Forwarding — Odoo 19</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --charcoal:  #101C2E;
+    --navy:      #162540;
+    --border:    #243A57;
+    --rust:      #D4541A;
+    --amber:     #F0A500;
+    --steel:     #4A7FA5;
+    --fog:       #7B95B0;
+    --paper:     #F0EBE1;
+    --paper-dark:#E2DAD0;
+    --white:     #FAFCFE;
+    --text:      #1C2E42;
+    --text-dim:  #4A6070;
+    --mono: 'Courier New', Courier, monospace;
+    --sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--white);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+
+  /* ── Banner ─────────────────────────────────────────────────── */
+  .banner-wrap {
+    width: 100%;
+    overflow-x: auto;
+    background: var(--charcoal);
+  }
+  .banner-wrap svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ── Manifest header ─────────────────────────────────────────── */
+  .manifest-header {
+    background: var(--charcoal);
+    color: var(--fog);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    padding: 10px 48px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-bottom: 2px solid var(--rust);
+  }
+  .manifest-header span { white-space: nowrap; }
+  .manifest-header .ref { color: var(--amber); }
+
+  /* ── Page wrapper ────────────────────────────────────────────── */
+  .page { max-width: 1080px; margin: 0 auto; padding: 0 32px 64px; }
+
+  /* ── Intro ───────────────────────────────────────────────────── */
+  .intro {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+    border-bottom: 1px solid var(--paper-dark);
+    margin-bottom: 48px;
+  }
+  .intro-lead { }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 12px;
+  }
+  .intro h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--charcoal);
+    text-wrap: balance;
+    margin-bottom: 16px;
+  }
+  .intro h1 em {
+    font-style: normal;
+    color: var(--rust);
+  }
+  .intro p {
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+    max-width: 44ch;
+  }
+  .intro-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--paper-dark);
+    border: 1px solid var(--paper-dark);
+    align-self: start;
+  }
+  .stat-cell {
+    background: var(--white);
+    padding: 20px 22px;
+  }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-num .unit { font-size: 1rem; color: var(--rust); }
+  .stat-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fog);
+    font-family: var(--mono);
+  }
+
+  /* ── Section title ───────────────────────────────────────────── */
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 4px;
+  }
+  .cat-code {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    color: var(--white);
+    background: var(--charcoal);
+    padding: 4px 9px;
+    flex-shrink: 0;
+  }
+  .section-head h2 {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-dim);
+  }
+  .section-rule {
+    border: none;
+    border-top: 1px solid var(--paper-dark);
+    margin-bottom: 2px;
+  }
+
+  /* ── Feature manifest ────────────────────────────────────────── */
+  .manifest-section { margin-bottom: 40px; }
+
+  .manifest-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .manifest-table thead tr {
+    border-bottom: 1px solid var(--border);
+    background: var(--charcoal);
+  }
+  .manifest-table thead th {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fog);
+    text-align: left;
+    padding: 7px 12px;
+    font-weight: 400;
+  }
+  .manifest-table tbody tr {
+    border-bottom: 1px solid var(--paper-dark);
+    transition: background 0.1s;
+  }
+  .manifest-table tbody tr:hover { background: var(--paper); }
+  .manifest-table tbody tr:last-child { border-bottom: none; }
+
+  .col-ref {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--steel);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    padding: 12px 12px 12px 0;
+    width: 90px;
+    vertical-align: top;
+  }
+  .col-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    padding: 12px 16px 12px 12px;
+    width: 220px;
+    vertical-align: top;
+  }
+  .col-desc {
+    font-size: 0.875rem;
+    color: var(--text-dim);
+    padding: 12px 12px 12px 0;
+    line-height: 1.55;
+    vertical-align: top;
+  }
+  .col-tag {
+    text-align: right;
+    padding: 12px 0 12px 8px;
+    vertical-align: top;
+    width: 80px;
+  }
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    padding: 3px 7px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .tag-core   { background: var(--paper); color: var(--text-dim); border: 1px solid var(--paper-dark); }
+  .tag-new    { background: var(--rust); color: #fff; }
+  .tag-smart  { background: var(--charcoal); color: var(--amber); }
+  .tag-report { background: var(--steel); color: #fff; }
+
+  /* ── Workflow strip ──────────────────────────────────────────── */
+  .workflow-strip {
+    background: var(--charcoal);
+    padding: 32px 0;
+    margin: 48px -32px;
+    overflow-x: auto;
+  }
+  .workflow-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .workflow-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fog);
+    margin-bottom: 20px;
+  }
+  .workflow-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+  }
+  .w-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .w-pill {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fog);
+    background: var(--navy);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    white-space: nowrap;
+  }
+  .w-pill.active { color: var(--white); background: var(--rust); border-color: var(--rust); }
+  .w-num {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--border);
+    letter-spacing: 0.05em;
+  }
+  .w-arrow {
+    color: var(--border);
+    font-size: 0.75rem;
+    padding: 0 2px;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 10px;
+  }
+
+  /* ── Tech specs ──────────────────────────────────────────────── */
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--paper-dark);
+    border: 1px solid var(--paper-dark);
+    margin-top: 48px;
+  }
+  .spec-cell {
+    background: var(--white);
+    padding: 22px 24px;
+  }
+  .spec-title {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fog);
+    margin-bottom: 10px;
+  }
+  .spec-items {
+    list-style: none;
+  }
+  .spec-items li {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    padding: 3px 0;
+    border-bottom: 1px solid var(--paper);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .spec-items li:last-child { border-bottom: none; }
+  .spec-items li::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background: var(--rust);
+    flex-shrink: 0;
+  }
+
+  /* ── Footer ──────────────────────────────────────────────────── */
+  .footer {
+    border-top: 2px solid var(--charcoal);
+    margin-top: 64px;
+    padding: 24px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-id {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--fog);
+  }
+  .footer-id strong { color: var(--charcoal); }
+  .footer-badge {
+    background: var(--charcoal);
+    color: var(--amber);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 6px 14px;
+  }
+
+  @media (max-width: 720px) {
+    .intro { grid-template-columns: 1fr; }
+    .specs-grid { grid-template-columns: 1fr; }
+    .intro h1 { font-size: 1.8rem; }
+    .manifest-header { padding: 10px 20px; }
+    .page { padding: 0 20px 48px; }
+    .col-tag { display: none; }
+    .col-ref { width: 70px; font-size: 0.65rem; }
+    .col-name { width: 160px; }
+  }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- BANNER 1000 × 500                                              -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="banner-wrap">
+<svg viewBox="0 0 1000 500" width="1000" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Supply Chain & Freight Forwarding module banner">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#070F1C"/>
+      <stop offset="100%" stop-color="#101C2E"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#0D1929"/>
+      <stop offset="100%" stop-color="#07111E"/>
+    </linearGradient>
+    <linearGradient id="glow-rust" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#D4541A" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#D4541A" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="glow-amber" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#F0A500" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#F0A500" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="blur-sm"><feGaussianBlur stdDeviation="2"/></filter>
+    <filter id="blur-lg"><feGaussianBlur stdDeviation="8"/></filter>
+    <clipPath id="banner-clip"><rect width="1000" height="500"/></clipPath>
+  </defs>
+  <g clip-path="url(#banner-clip)">
+
+  <!-- Sky background -->
+  <rect width="1000" height="500" fill="url(#sky)"/>
+
+  <!-- Dot grid overlay -->
+  <g opacity="0.07">
+    <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="1" fill="#7B95B0"/>
+    </pattern>
+    <rect width="1000" height="500" fill="url(#dots)"/>
+  </g>
+
+  <!-- Horizon line -->
+  <rect x="0" y="310" width="1000" height="190" fill="url(#water)"/>
+  <rect x="0" y="308" width="1000" height="2" fill="#162540"/>
+
+  <!-- Water reflections -->
+  <rect x="0"   y="316" width="1000" height="1" fill="#1B2E45" opacity="0.6"/>
+  <rect x="0"   y="325" width="800"  height="1" fill="#1B2E45" opacity="0.3"/>
+  <rect x="100" y="338" width="700"  height="1" fill="#1B2E45" opacity="0.2"/>
+
+  <!-- ── Crane structure (right side) ── -->
+  <!-- Mast -->
+  <rect x="820" y="60" width="8" height="260" fill="#1E3050"/>
+  <!-- Boom arm -->
+  <rect x="700" y="60" width="128" height="7" fill="#1E3050"/>
+  <!-- Boom tip light -->
+  <circle cx="702" cy="63" r="4" fill="#F0A500" opacity="0.9"/>
+  <circle cx="702" cy="63" r="10" fill="url(#glow-amber)" filter="url(#blur-sm)"/>
+  <!-- Rope lines -->
+  <line x1="750" y1="67" x2="760" y2="200" stroke="#162540" stroke-width="1.5"/>
+  <line x1="790" y1="67" x2="760" y2="200" stroke="#162540" stroke-width="1.5"/>
+  <!-- Trolley -->
+  <rect x="745" y="58" width="30" height="10" fill="#243A57"/>
+  <!-- Hook block -->
+  <rect x="752" y="192" width="16" height="14" fill="#243A57" rx="1"/>
+
+  <!-- Crane base / counterweight -->
+  <rect x="818" y="316" width="30" height="60" fill="#162540"/>
+  <!-- Counterweight arm -->
+  <rect x="824" y="60" width="80" height="6" fill="#1E3050"/>
+  <rect x="880" y="54" width="28" height="18" fill="#243A57"/>
+
+  <!-- ── Quay / dock ── -->
+  <rect x="0" y="316" width="1000" height="20" fill="#162540"/>
+  <!-- Bollards -->
+  <rect x="80"  y="308" width="8" height="14" rx="2" fill="#243A57"/>
+  <rect x="200" y="308" width="8" height="14" rx="2" fill="#243A57"/>
+  <rect x="340" y="308" width="8" height="14" rx="2" fill="#243A57"/>
+
+  <!-- ── Container stacks ── -->
+  <!-- Stack A (leftmost) — 3 high, 4 wide -->
+  <!-- Row 3 (top) -->
+  <rect x="30"  y="218" width="58" height="28" fill="#4A7FA5" rx="1"/><rect x="30"  y="218" width="58" height="4" fill="#3A6A8E" rx="1"/>
+  <rect x="91"  y="218" width="58" height="28" fill="#D4541A" rx="1"/><rect x="91"  y="218" width="58" height="4" fill="#B8441A" rx="1"/>
+  <rect x="152" y="218" width="58" height="28" fill="#4A7FA5" rx="1"/><rect x="152" y="218" width="58" height="4" fill="#3A6A8E" rx="1"/>
+  <rect x="213" y="218" width="58" height="28" fill="#2A5A40" rx="1"/><rect x="213" y="218" width="58" height="4" fill="#1E4530" rx="1"/>
+  <!-- Row 2 -->
+  <rect x="30"  y="249" width="58" height="28" fill="#D4541A" rx="1"/><rect x="30"  y="249" width="58" height="4" fill="#B8441A" rx="1"/>
+  <rect x="91"  y="249" width="58" height="28" fill="#2A5A40" rx="1"/><rect x="91"  y="249" width="58" height="4" fill="#1E4530" rx="1"/>
+  <rect x="152" y="249" width="58" height="28" fill="#D4541A" rx="1"/><rect x="152" y="249" width="58" height="4" fill="#B8441A" rx="1"/>
+  <rect x="213" y="249" width="58" height="28" fill="#4A7FA5" rx="1"/><rect x="213" y="249" width="58" height="4" fill="#3A6A8E" rx="1"/>
+  <!-- Row 1 (bottom) -->
+  <rect x="30"  y="280" width="58" height="30" fill="#2A5A40" rx="1"/><rect x="30"  y="280" width="58" height="4" fill="#1E4530" rx="1"/>
+  <rect x="91"  y="280" width="58" height="30" fill="#4A7FA5" rx="1"/><rect x="91"  y="280" width="58" height="4" fill="#3A6A8E" rx="1"/>
+  <rect x="152" y="280" width="58" height="30" fill="#2A5A40" rx="1"/><rect x="152" y="280" width="58" height="4" fill="#1E4530" rx="1"/>
+  <rect x="213" y="280" width="58" height="30" fill="#D4541A" rx="1"/><rect x="213" y="280" width="58" height="4" fill="#B8441A" rx="1"/>
+
+  <!-- Container detail lines (corrugation) -->
+  <g stroke="#ffffff08" stroke-width="1">
+    <line x1="49"  y1="218" x2="49"  y2="310"/>
+    <line x1="110" y1="218" x2="110" y2="310"/>
+    <line x1="171" y1="218" x2="171" y2="310"/>
+    <line x1="232" y1="218" x2="232" y2="310"/>
+  </g>
+
+  <!-- Stack B (mid-left, fewer) — 2 high -->
+  <rect x="295" y="249" width="58" height="28" fill="#F0A500" rx="1"/><rect x="295" y="249" width="58" height="4" fill="#CC8C00" rx="1"/>
+  <rect x="356" y="249" width="58" height="28" fill="#D4541A" rx="1"/><rect x="356" y="249" width="58" height="4" fill="#B8441A" rx="1"/>
+  <rect x="417" y="249" width="58" height="28" fill="#4A7FA5" rx="1"/><rect x="417" y="249" width="58" height="4" fill="#3A6A8E" rx="1"/>
+  <rect x="295" y="280" width="58" height="30" fill="#D4541A" rx="1"/><rect x="295" y="280" width="58" height="4" fill="#B8441A" rx="1"/>
+  <rect x="356" y="280" width="58" height="30" fill="#4A7FA5" rx="1"/><rect x="356" y="280" width="58" height="4" fill="#3A6A8E" rx="1"/>
+  <rect x="417" y="280" width="58" height="30" fill="#2A5A40" rx="1"/><rect x="417" y="280" width="58" height="4" fill="#1E4530" rx="1"/>
+
+  <!-- Crane suspended container being lifted -->
+  <rect x="742" y="206" width="58" height="28" fill="#D4541A" rx="1"/>
+  <rect x="742" y="206" width="58" height="4"  fill="#B8441A" rx="1"/>
+  <!-- Spreader bar -->
+  <rect x="738" y="200" width="66" height="6" fill="#243A57" rx="1"/>
+  <!-- Lines to spreader -->
+  <line x1="748" y1="200" x2="755" y2="192" stroke="#1E3050" stroke-width="1.5"/>
+  <line x1="798" y1="200" x2="768" y2="192" stroke="#1E3050" stroke-width="1.5"/>
+
+  <!-- Ambient rust glow under container stack -->
+  <rect x="0" y="280" width="500" height="40" fill="url(#glow-rust)" filter="url(#blur-lg)" opacity="0.4"/>
+
+  <!-- ── Typography ── -->
+  <!-- Module eyebrow -->
+  <text x="50" y="88" font-family="'Courier New', monospace" font-size="11" letter-spacing="3" fill="#7B95B0" text-anchor="start" font-weight="400">ODOO 19 ENTERPRISE · MODULE</text>
+
+  <!-- Main headline -->
+  <text x="50" y="138" font-family="'Segoe UI', system-ui, sans-serif" font-size="46" font-weight="800" fill="#FAFCFE" letter-spacing="-1" text-anchor="start">Supply Chain &amp;</text>
+  <text x="50" y="188" font-family="'Segoe UI', system-ui, sans-serif" font-size="46" font-weight="800" fill="#D4541A"  letter-spacing="-1" text-anchor="start">Freight Forwarding</text>
+
+  <!-- Tagline -->
+  <text x="52" y="215" font-family="'Segoe UI', system-ui, sans-serif" font-size="15" fill="#7B95B0" text-anchor="start" font-weight="400">End-to-end shipment operations · containers · charges · compliance</text>
+
+  <!-- Divider rule -->
+  <rect x="50" y="228" width="420" height="1.5" fill="#D4541A" opacity="0.7"/>
+
+  <!-- Stats row -->
+  <text x="52"  y="253" font-family="'Courier New', monospace" font-size="11.5" fill="#F0A500" font-weight="700" letter-spacing="0.5">50+</text>
+  <text x="52"  y="267" font-family="'Courier New', monospace" font-size="9"    fill="#4A6070" letter-spacing="1">WORLD PORTS</text>
+
+  <text x="120" y="253" font-family="'Courier New', monospace" font-size="11.5" fill="#F0A500" font-weight="700" letter-spacing="0.5">7</text>
+  <text x="120" y="267" font-family="'Courier New', monospace" font-size="9"    fill="#4A6070" letter-spacing="1">LIFECYCLE STATES</text>
+
+  <text x="208" y="253" font-family="'Courier New', monospace" font-size="11.5" fill="#F0A500" font-weight="700" letter-spacing="0.5">∞</text>
+  <text x="208" y="267" font-family="'Courier New', monospace" font-size="9"    fill="#4A6070" letter-spacing="1">CURRENCIES</text>
+
+  <text x="265" y="253" font-family="'Courier New', monospace" font-size="11.5" fill="#F0A500" font-weight="700" letter-spacing="0.5">v19.0</text>
+  <text x="265" y="267" font-family="'Courier New', monospace" font-size="9"    fill="#4A6070" letter-spacing="1">ENTERPRISE</text>
+
+  <!-- Manifest ref bottom-left -->
+  <text x="20" y="478" font-family="'Courier New', monospace" font-size="9.5" fill="#243A57" letter-spacing="1">DOC-REF: OD19-SCM-FF-2026</text>
+  </g>
+</svg>
+</div>
+
+
+<!-- Manifest document header -->
+<div class="manifest-header">
+  <span>DOCUMENT: <span class="ref">OD19-SCM-FREIGHT-FORWARDING</span></span>
+  <span>CATEGORY: INVENTORY / FREIGHT</span>
+  <span>PLATFORM: ODOO 19 ENTERPRISE</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE CONTENT                                                    -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- Intro -->
+  <div class="intro">
+    <div class="intro-lead">
+      <div class="eyebrow">// Supply Chain Module</div>
+      <h1>Built for freight forwarders who move <em>real cargo</em></h1>
+      <p>A full-stack operations module covering every stage of an import or export shipment — from booking to final delivery. Containers, carriers, ports, charges, customs, and compliance in one unified job file.</p>
+    </div>
+    <div class="intro-stats">
+      <div class="stat-cell">
+        <div class="stat-num">50<span class="unit">+</span></div>
+        <div class="stat-label">Seeded World Ports</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">7</div>
+        <div class="stat-label">Shipment States</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Currencies</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">3<span class="unit">×</span></div>
+        <div class="stat-label">Transport Modes</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">v3</div>
+        <div class="stat-label">Module Version</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">19<span class="unit">e</span></div>
+        <div class="stat-label">Odoo Version</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SHIPMENT MANAGEMENT ── -->
+  <div class="manifest-section">
+    <div class="section-head">
+      <span class="cat-code">SHP</span>
+      <h2>Shipment Management</h2>
+    </div>
+    <hr class="section-rule">
+    <table class="manifest-table">
+      <thead>
+        <tr>
+          <th>REF</th><th>FEATURE</th><th>DESCRIPTION</th><th>CLASS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-ref">SHP-001</td>
+          <td class="col-name">Job File (Shipment)</td>
+          <td class="col-desc">Complete shipment record covering import and export directions. Tracks all parties — customer, shipper, consignee — with full audit trail and chatter history.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">SHP-002</td>
+          <td class="col-name">Multi-Transport Mode</td>
+          <td class="col-desc">Sea, Air, and Land modes selectable per shipment. Mode-appropriate fields and validations adapt accordingly.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">SHP-003</td>
+          <td class="col-name">Multi-Leg Routing</td>
+          <td class="col-desc">Full transshipment support via a dedicated Legs tab. Each leg captures origin/destination ports, carrier, vessel, voyage number, B/L, ETD, ETA, and status independently.</td>
+          <td class="col-tag"><span class="tag tag-new">NEW</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">SHP-004</td>
+          <td class="col-name">Incoterms</td>
+          <td class="col-desc">Standard trade terms (EXW, FOB, CIF, DAP …) linked to every shipment, with correct liability and cost allocation recorded on the job file.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">SHP-005</td>
+          <td class="col-name">Booking & B/L References</td>
+          <td class="col-desc">Master B/L, booking reference, and customs declaration numbers stored and searchable. Essential for port release and customs clearance workflows.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── CONTAINERS ── -->
+  <div class="manifest-section">
+    <div class="section-head">
+      <span class="cat-code">CTR</span>
+      <h2>Container & Cargo Tracking</h2>
+    </div>
+    <hr class="section-rule">
+    <table class="manifest-table">
+      <thead>
+        <tr><th>REF</th><th>FEATURE</th><th>DESCRIPTION</th><th>CLASS</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-ref">CTR-001</td>
+          <td class="col-name">Container Master</td>
+          <td class="col-desc">Container number, type (20GP/40HC/45HC/20RF …), seal number, tare weight, gross weight, and volume per container per shipment.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">CTR-002</td>
+          <td class="col-name">HS Code & Commodity</td>
+          <td class="col-desc">HS code, commodity description, package count, and country of origin recorded per container. Powers customs declarations and duty classification.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">CTR-003</td>
+          <td class="col-name">Customs Valuation</td>
+          <td class="col-desc">Customs value in any currency per container, converted to company currency automatically. Used for duty calculations and insurance assessments.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">CTR-004</td>
+          <td class="col-name">Tracking Status & URL</td>
+          <td class="col-desc">Per-container tracking status (Unknown / In Transit / Arrived / Delivered) and a live tracking link generated from the carrier's URL template with the container number substituted.</td>
+          <td class="col-tag"><span class="tag tag-new">NEW</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── CARRIERS & PORTS ── -->
+  <div class="manifest-section">
+    <div class="section-head">
+      <span class="cat-code">CAR</span>
+      <h2>Carriers, Shipping Lines & Ports</h2>
+    </div>
+    <hr class="section-rule">
+    <table class="manifest-table">
+      <thead>
+        <tr><th>REF</th><th>FEATURE</th><th>DESCRIPTION</th><th>CLASS</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-ref">CAR-001</td>
+          <td class="col-name">Shipping Line Master</td>
+          <td class="col-desc">Carrier name, SCAC code, transport mode, and operating routes. Shared across all shipments with multi-company isolation where required.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">CAR-002</td>
+          <td class="col-name">Demurrage Settings</td>
+          <td class="col-desc">Free days and daily demurrage rate configured per shipping line. Drives automatic demurrage calculation on arrived shipments.</td>
+          <td class="col-tag"><span class="tag tag-smart">AUTO</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">CAR-003</td>
+          <td class="col-name">Tracking URL Templates</td>
+          <td class="col-desc">Carrier-level tracking URL template with <code>{container}</code> placeholder. Container records generate clickable live-tracking links automatically.</td>
+          <td class="col-tag"><span class="tag tag-smart">AUTO</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">PRT-001</td>
+          <td class="col-name">50+ World Ports</td>
+          <td class="col-desc">Pre-seeded port master with UN/LOCODE codes covering major hubs across Asia-Pacific, Europe, Americas, Middle East, Africa, and Indian subcontinent.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── WORKFLOW ── -->
+  <div class="workflow-strip">
+    <div class="workflow-inner">
+      <div class="workflow-label">// SHIPMENT LIFECYCLE — STATE MACHINE</div>
+      <div class="workflow-steps">
+        <div class="w-step"><div class="w-pill">Draft</div><div class="w-num">01</div></div>
+        <div class="w-arrow">→</div>
+        <div class="w-step"><div class="w-pill active">Booked</div><div class="w-num">02</div></div>
+        <div class="w-arrow">→</div>
+        <div class="w-step"><div class="w-pill">In Transit</div><div class="w-num">03</div></div>
+        <div class="w-arrow">→</div>
+        <div class="w-step"><div class="w-pill">Arrived</div><div class="w-num">04</div></div>
+        <div class="w-arrow">→</div>
+        <div class="w-step"><div class="w-pill">Cleared</div><div class="w-num">05</div></div>
+        <div class="w-arrow">→</div>
+        <div class="w-step"><div class="w-pill">Delivered</div><div class="w-num">06</div></div>
+        <div class="w-arrow" style="color:#D4541A">⊘</div>
+        <div class="w-step"><div class="w-pill" style="border-color:#D4541A;color:#D4541A">Cancelled</div><div class="w-num">07</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FINANCIALS ── -->
+  <div class="manifest-section">
+    <div class="section-head">
+      <span class="cat-code">FIN</span>
+      <h2>Financials & Charges</h2>
+    </div>
+    <hr class="section-rule">
+    <table class="manifest-table">
+      <thead>
+        <tr><th>REF</th><th>FEATURE</th><th>DESCRIPTION</th><th>CLASS</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-ref">FIN-001</td>
+          <td class="col-name">Multi-Currency Charges</td>
+          <td class="col-desc">Charge lines in any currency (Ocean Freight, THC, Port Clearance, Customs, Documentation, Insurance, Handling, Demurrage …). Each charge linked to a type category with GL account mapping.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">FIN-002</td>
+          <td class="col-name">Auto Currency Conversion</td>
+          <td class="col-desc">Charges entered in any currency are automatically converted to the company currency using Odoo's live exchange rates. Totals always displayed in company currency.</td>
+          <td class="col-tag"><span class="tag tag-smart">AUTO</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">FIN-003</td>
+          <td class="col-name">Demurrage Auto-Calculation</td>
+          <td class="col-desc">On arrival, free days are counted from the actual arrival date. Days beyond the free period multiplied by the carrier's daily rate and container count, producing a demurrage charge with one click.</td>
+          <td class="col-tag"><span class="tag tag-smart">AUTO</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">FIN-004</td>
+          <td class="col-name">Customer Invoice Generation</td>
+          <td class="col-desc">Creates a validated Odoo invoice from shipment charges in one click. Charge type GL accounts pre-populate invoice lines. Manager can review and post.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">FIN-005</td>
+          <td class="col-name">Vendor Bill Generation</td>
+          <td class="col-desc">Groups charges by vendor partner and creates one bill per vendor automatically. Matching expense accounts from charge type configuration are applied to each line.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">FIN-006</td>
+          <td class="col-name">Tariff / Rate Card</td>
+          <td class="col-desc">Tariff records define rates by origin port, destination port, carrier, and container type. The "Apply Tariff" action matches and creates charges from the rate card in bulk.</td>
+          <td class="col-tag"><span class="tag tag-new">NEW</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── COMPLIANCE & WORKFLOW ── -->
+  <div class="manifest-section">
+    <div class="section-head">
+      <span class="cat-code">WFL</span>
+      <h2>Workflow & Compliance</h2>
+    </div>
+    <hr class="section-rule">
+    <table class="manifest-table">
+      <thead>
+        <tr><th>REF</th><th>FEATURE</th><th>DESCRIPTION</th><th>CLASS</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-ref">WFL-001</td>
+          <td class="col-name">State Validation Guards</td>
+          <td class="col-desc">Mandatory field checks enforced at each state transition. Cannot move to Booked without customer, shipper, consignee, and ports. Cannot move In Transit without ETD and booking reference. Cannot mark Arrived without ETA.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">WFL-002</td>
+          <td class="col-name">Manager Approval Workflow</td>
+          <td class="col-desc">High-value shipments (configurable charge threshold in company settings) require manager-group approval before booking. Prevents unauthorized commitment of large freight costs.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">WFL-003</td>
+          <td class="col-name">Multi-Company Support</td>
+          <td class="col-desc">Shipping lines and ports can be shared globally or restricted per company. IR rules enforce record-level isolation across multi-company Odoo environments.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">WFL-004</td>
+          <td class="col-name">Date Constraint Validation</td>
+          <td class="col-desc">ETA cannot be earlier than ETD — enforced by a Python constraint on save. Arrival date and delivery date are set automatically when transitioning to Arrived and Delivered states.</td>
+          <td class="col-tag"><span class="tag tag-core">CORE</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── REPORTING & NOTIFICATIONS ── -->
+  <div class="manifest-section">
+    <div class="section-head">
+      <span class="cat-code">RPT</span>
+      <h2>Reporting & Notifications</h2>
+    </div>
+    <hr class="section-rule">
+    <table class="manifest-table">
+      <thead>
+        <tr><th>REF</th><th>FEATURE</th><th>DESCRIPTION</th><th>CLASS</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-ref">RPT-001</td>
+          <td class="col-name">Shipment PDF Report</td>
+          <td class="col-desc">Printable job file / Bill of Lading report covering all shipment details, container list, charge summary, parties, and port information. Accessible directly from the shipment form.</td>
+          <td class="col-tag"><span class="tag tag-report">PDF</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">RPT-002</td>
+          <td class="col-name">ETA Approaching Alert</td>
+          <td class="col-desc">Scheduled cron runs daily. Any in-transit shipment with ETA exactly 3 days out triggers an automated email to the customer — once per shipment, tracked by flag to prevent duplicates.</td>
+          <td class="col-tag"><span class="tag tag-smart">CRON</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">RPT-003</td>
+          <td class="col-name">State Change Notifications</td>
+          <td class="col-desc">Every state transition sends a styled HTML email to both the Customer and the Consignee. Email includes status banner, shipment details table, port info, carrier, ETD/ETA, B/L, and container count — color-coded by state.</td>
+          <td class="col-tag"><span class="tag tag-smart">AUTO</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">RPT-004</td>
+          <td class="col-name">KPI Graph & Pivot Views</td>
+          <td class="col-desc">Pre-built graph view (bar/line/pie) and pivot analysis for shipment volumes, charge totals, and state distributions. Usable directly from the Shipments list.</td>
+          <td class="col-tag"><span class="tag tag-report">KPI</span></td>
+        </tr>
+        <tr>
+          <td class="col-ref">RPT-005</td>
+          <td class="col-name">Charge Type Analysis</td>
+          <td class="col-desc">Charges are categorised (Freight, Port, Clearance, Documentation, Handling, Insurance, Other) enabling breakdowns by category across any date or shipment filter.</td>
+          <td class="col-tag"><span class="tag tag-report">KPI</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Tech specs -->
+  <div class="specs-grid">
+    <div class="spec-cell">
+      <div class="spec-title">// Dependencies</div>
+      <ul class="spec-items">
+        <li>mail</li>
+        <li>contacts</li>
+        <li>account</li>
+        <li>base_setup</li>
+      </ul>
+    </div>
+    <div class="spec-cell">
+      <div class="spec-title">// Models</div>
+      <ul class="spec-items">
+        <li>freight.shipment</li>
+        <li>freight.container</li>
+        <li>freight.shipment.leg</li>
+        <li>freight.charge · freight.charge.type</li>
+        <li>freight.shipping.line</li>
+        <li>freight.port · freight.tariff</li>
+      </ul>
+    </div>
+    <div class="spec-cell">
+      <div class="spec-title">// Included Data</div>
+      <ul class="spec-items">
+        <li>50+ world ports (UN/LOCODE)</li>
+        <li>15 charge type presets</li>
+        <li>3 demo shipments</li>
+        <li>State notification email template</li>
+        <li>ETA cron · PDF report template</li>
+        <li>Manager security group + IR rules</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-id">
+      <strong>freight_forwarding</strong> · Odoo 19.0 Enterprise · License: LGPL-3
+    </div>
+  </div>
+
+</div>

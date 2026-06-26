@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_freight_shipment_user,freight.shipment.user,model_freight_shipment,group_freight_user,1,1,1,0
+access_freight_shipment_manager,freight.shipment.manager,model_freight_shipment,group_freight_manager,1,1,1,1
+access_freight_container_user,freight.container.user,model_freight_container,group_freight_user,1,1,1,1
+access_freight_charge_user,freight.charge.user,model_freight_charge,group_freight_user,1,1,1,1
+access_freight_shipping_line_user,freight.shipping.line.user,model_freight_shipping_line,group_freight_user,1,0,0,0
+access_freight_shipping_line_manager,freight.shipping.line.manager,model_freight_shipping_line,group_freight_manager,1,1,1,1
+access_freight_port_user,freight.port.user,model_freight_port,group_freight_user,1,0,0,0
+access_freight_port_manager,freight.port.manager,model_freight_port,group_freight_manager,1,1,1,1
+access_freight_charge_type_user,freight.charge.type.user,model_freight_charge_type,group_freight_user,1,0,0,0
+access_freight_charge_type_manager,freight.charge.type.manager,model_freight_charge_type,group_freight_manager,1,1,1,1
+access_freight_shipment_leg_user,freight.shipment.leg.user,model_freight_shipment_leg,group_freight_user,1,1,1,0
+access_freight_shipment_leg_manager,freight.shipment.leg.manager,model_freight_shipment_leg,group_freight_manager,1,1,1,1
+access_freight_tariff_user,freight.tariff.user,model_freight_tariff,group_freight_user,1,0,0,0
+access_freight_tariff_manager,freight.tariff.manager,model_freight_tariff,group_freight_manager,1,1,1,1

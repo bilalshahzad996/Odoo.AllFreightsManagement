@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="port_cnsha" model="freight.port">
+        <field name="name">Shanghai</field>
+        <field name="code">CNSHA</field>
+        <field name="country_id" ref="base.cn"/>
+        <field name="port_type">sea</field>
+    </record>
+
+    <record id="port_sgsin" model="freight.port">
+        <field name="name">Singapore</field>
+        <field name="code">SGSIN</field>
+        <field name="country_id" ref="base.sg"/>
+        <field name="port_type">sea</field>
+    </record>
+
+    <record id="port_nlrtm" model="freight.port">
+        <field name="name">Rotterdam</field>
+        <field name="code">NLRTM</field>
+        <field name="country_id" ref="base.nl"/>
+        <field name="port_type">sea</field>
+    </record>
+
+    <record id="port_uslax" model="freight.port">
+        <field name="name">Los Angeles</field>
+        <field name="code">USLAX</field>
+        <field name="country_id" ref="base.us"/>
+        <field name="port_type">sea</field>
+    </record>
+
+    <record id="port_aejea" model="freight.port">
+        <field name="name">Jebel Ali</field>
+        <field name="code">AEJEA</field>
+        <field name="country_id" ref="base.ae"/>
+        <field name="port_type">sea</field>
+    </record>
+
+    <record id="port_gbfxt" model="freight.port">
+        <field name="name">Felixstowe</field>
+        <field name="code">GBFXT</field>
+        <field name="country_id" ref="base.uk"/>
+        <field name="port_type">sea</field>
+    </record>
+
+    <record id="port_hkhkg" model="freight.port">
+        <field name="name">Hong Kong</field>
+        <field name="code">HKHKG</field>
+        <field name="country_id" ref="base.hk"/>
+        <field name="port_type">sea</field>
+    </record>
+
+    <record id="port_innsa" model="freight.port">
+        <field name="name">Nhava Sheva (JNPT)</field>
+        <field name="code">INNSA</field>
+        <field name="country_id" ref="base.in"/>
+        <field name="port_type">sea</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ===== EUROPE ===== -->
+        <record id="port_DEHAM" model="freight.port">
+            <field name="name">Hamburg</field>
+            <field name="code">DEHAM</field>
+            <field name="country_id" ref="base.de"/>
+        </record>
+        <record id="port_BEANR" model="freight.port">
+            <field name="name">Antwerp</field>
+            <field name="code">BEANR</field>
+            <field name="country_id" ref="base.be"/>
+        </record>
+        <record id="port_ESBCN" model="freight.port">
+            <field name="name">Barcelona</field>
+            <field name="code">ESBCN</field>
+            <field name="country_id" ref="base.es"/>
+        </record>
+        <record id="port_ESVLC" model="freight.port">
+            <field name="name">Valencia</field>
+            <field name="code">ESVLC</field>
+            <field name="country_id" ref="base.es"/>
+        </record>
+        <record id="port_GRPIR" model="freight.port">
+            <field name="name">Piraeus</field>
+            <field name="code">GRPIR</field>
+            <field name="country_id" ref="base.gr"/>
+        </record>
+        <record id="port_TRIST" model="freight.port">
+            <field name="name">Istanbul</field>
+            <field name="code">TRIST</field>
+            <field name="country_id" ref="base.tr"/>
+        </record>
+        <record id="port_DEBRV" model="freight.port">
+            <field name="name">Bremen</field>
+            <field name="code">DEBRV</field>
+            <field name="country_id" ref="base.de"/>
+        </record>
+        <record id="port_GBFXT" model="freight.port">
+            <field name="name">Felixstowe</field>
+            <field name="code">GBFXT</field>
+            <field name="country_id" ref="base.uk"/>
+        </record>
+        <record id="port_GBSOU" model="freight.port">
+            <field name="name">Southampton</field>
+            <field name="code">GBSOU</field>
+            <field name="country_id" ref="base.uk"/>
+        </record>
+        <record id="port_FRMRS" model="freight.port">
+            <field name="name">Marseille</field>
+            <field name="code">FRMRS</field>
+            <field name="country_id" ref="base.fr"/>
+        </record>
+
+        <!-- ===== ASIA-PACIFIC ===== -->
+        <record id="port_KRPUS" model="freight.port">
+            <field name="name">Busan</field>
+            <field name="code">KRPUS</field>
+            <field name="country_id" ref="base.kr"/>
+        </record>
+        <record id="port_TWKHH" model="freight.port">
+            <field name="name">Kaohsiung</field>
+            <field name="code">TWKHH</field>
+            <field name="country_id" ref="base.tw"/>
+        </record>
+        <record id="port_MYTPP" model="freight.port">
+            <field name="name">Tanjung Pelepas</field>
+            <field name="code">MYTPP</field>
+            <field name="country_id" ref="base.my"/>
+        </record>
+        <record id="port_MYPKG" model="freight.port">
+            <field name="name">Port Klang</field>
+            <field name="code">MYPKG</field>
+            <field name="country_id" ref="base.my"/>
+        </record>
+        <record id="port_CNNSA" model="freight.port">
+            <field name="name">Guangzhou Nansha</field>
+            <field name="code">CNNSA</field>
+            <field name="country_id" ref="base.cn"/>
+        </record>
+        <record id="port_CNSZX" model="freight.port">
+            <field name="name">Shenzhen Yantian</field>
+            <field name="code">CNSZX</field>
+            <field name="country_id" ref="base.cn"/>
+        </record>
+        <record id="port_CNTSN" model="freight.port">
+            <field name="name">Tianjin Xingang</field>
+            <field name="code">CNTSN</field>
+            <field name="country_id" ref="base.cn"/>
+        </record>
+        <record id="port_CNTAO" model="freight.port">
+            <field name="name">Qingdao</field>
+            <field name="code">CNTAO</field>
+            <field name="country_id" ref="base.cn"/>
+        </record>
+        <record id="port_CNNGB" model="freight.port">
+            <field name="name">Ningbo-Zhoushan</field>
+            <field name="code">CNNGB</field>
+            <field name="country_id" ref="base.cn"/>
+        </record>
+        <record id="port_JPTYO" model="freight.port">
+            <field name="name">Tokyo</field>
+            <field name="code">JPTYO</field>
+            <field name="country_id" ref="base.jp"/>
+        </record>
+        <record id="port_JPYOK" model="freight.port">
+            <field name="name">Yokohama</field>
+            <field name="code">JPYOK</field>
+            <field name="country_id" ref="base.jp"/>
+        </record>
+        <record id="port_AUMEL" model="freight.port">
+            <field name="name">Melbourne</field>
+            <field name="code">AUMEL</field>
+            <field name="country_id" ref="base.au"/>
+        </record>
+        <record id="port_AUSYD" model="freight.port">
+            <field name="name">Sydney</field>
+            <field name="code">AUSYD</field>
+            <field name="country_id" ref="base.au"/>
+        </record>
+
+        <!-- ===== AMERICAS ===== -->
+        <record id="port_USNYC" model="freight.port">
+            <field name="name">New York / New Jersey</field>
+            <field name="code">USNYC</field>
+            <field name="country_id" ref="base.us"/>
+        </record>
+        <record id="port_USLGB" model="freight.port">
+            <field name="name">Long Beach</field>
+            <field name="code">USLGB</field>
+            <field name="country_id" ref="base.us"/>
+        </record>
+        <record id="port_USSAV" model="freight.port">
+            <field name="name">Savannah</field>
+            <field name="code">USSAV</field>
+            <field name="country_id" ref="base.us"/>
+        </record>
+        <record id="port_USHOU" model="freight.port">
+            <field name="name">Houston</field>
+            <field name="code">USHOU</field>
+            <field name="country_id" ref="base.us"/>
+        </record>
+        <record id="port_CAVAN" model="freight.port">
+            <field name="name">Vancouver</field>
+            <field name="code">CAVAN</field>
+            <field name="country_id" ref="base.ca"/>
+        </record>
+        <record id="port_BRSSZ" model="freight.port">
+            <field name="name">Santos</field>
+            <field name="code">BRSSZ</field>
+            <field name="country_id" ref="base.br"/>
+        </record>
+        <record id="port_USPNW" model="freight.port">
+            <field name="name">Seattle / Tacoma</field>
+            <field name="code">USSEL</field>
+            <field name="country_id" ref="base.us"/>
+        </record>
+
+        <!-- ===== MIDDLE EAST / AFRICA ===== -->
+        <record id="port_AEJEA" model="freight.port">
+            <field name="name">Jebel Ali (Dubai)</field>
+            <field name="code">AEJEA</field>
+            <field name="country_id" ref="base.ae"/>
+        </record>
+        <record id="port_LKCMB" model="freight.port">
+            <field name="name">Colombo</field>
+            <field name="code">LKCMB</field>
+            <field name="country_id" ref="base.lk"/>
+        </record>
+        <record id="port_ZADUR" model="freight.port">
+            <field name="name">Durban</field>
+            <field name="code">ZADUR</field>
+            <field name="country_id" ref="base.za"/>
+        </record>
+        <record id="port_NGAPP" model="freight.port">
+            <field name="name">Lagos Apapa</field>
+            <field name="code">NGAPP</field>
+            <field name="country_id" ref="base.ng"/>
+        </record>
+        <record id="port_KEMBA" model="freight.port">
+            <field name="name">Mombasa</field>
+            <field name="code">KEMBA</field>
+            <field name="country_id" ref="base.ke"/>
+        </record>
+        <record id="port_EGPSD" model="freight.port">
+            <field name="name">Port Said</field>
+            <field name="code">EGPSD</field>
+            <field name="country_id" ref="base.eg"/>
+        </record>
+
+        <!-- ===== INDIAN SUBCONTINENT ===== -->
+        <record id="port_INMAA" model="freight.port">
+            <field name="name">Chennai (Madras)</field>
+            <field name="code">INMAA</field>
+            <field name="country_id" ref="base.in"/>
+        </record>
+        <record id="port_INNHAVA" model="freight.port">
+            <field name="name">Nhava Sheva (Mumbai)</field>
+            <field name="code">INNSA</field>
+            <field name="country_id" ref="base.in"/>
+        </record>
+        <record id="port_BDCGP" model="freight.port">
+            <field name="name">Chittagong</field>
+            <field name="code">BDCGP</field>
+            <field name="country_id" ref="base.bd"/>
+        </record>
+
+    </data>
+</odoo>

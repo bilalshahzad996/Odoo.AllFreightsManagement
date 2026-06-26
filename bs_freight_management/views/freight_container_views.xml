@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_freight_container_list" model="ir.ui.view">
+        <field name="name">freight.container.list</field>
+        <field name="model">freight.container</field>
+        <field name="arch" type="xml">
+            <list string="Containers">
+                <field name="name"/>
+                <field name="container_type"/>
+                <field name="seal_number"/>
+                <field name="shipment_id"/>
+                <field name="package_count" sum="Packages"/>
+                <field name="gross_weight" sum="Gross Weight"/>
+                <field name="volume" sum="Volume"/>
+                <field name="hs_code"/>
+                <field name="country_of_origin_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_freight_container_form" model="ir.ui.view">
+        <field name="name">freight.container.form</field>
+        <field name="model">freight.container</field>
+        <field name="arch" type="xml">
+            <form string="Container">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. MSKU1234567"/></h1>
+                    </div>
+                    <group>
+                        <group string="Container Details">
+                            <field name="container_type"/>
+                            <field name="seal_number"/>
+                            <field name="shipment_id"/>
+                        </group>
+                        <group string="Cargo">
+                            <field name="package_count"/>
+                            <field name="gross_weight"/>
+                            <field name="volume"/>
+                        </group>
+                    </group>
+                    <group string="Customs / HS Information">
+                        <group>
+                            <field name="hs_code"/>
+                            <field name="commodity_description"/>
+                            <field name="country_of_origin_id"/>
+                        </group>
+                        <group>
+                            <field name="customs_value"/>
+                            <field name="customs_currency_id"/>
+                        </group>
+                    </group>
+                    <group string="Container Tracking">
+                        <group>
+                            <field name="tracking_status"/>
+                            <field name="last_tracking_event"/>
+                            <field name="last_tracking_date"/>
+                        </group>
+                        <group>
+                            <field name="tracking_url" widget="url"
+                                   invisible="not tracking_url"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_freight_container" model="ir.actions.act_window">
+        <field name="name">Containers</field>
+        <field name="res_model">freight.container</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No containers yet</p>
+            <p>Add containers from a shipment's Containers tab.</p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="charge_type_ocean_freight" model="freight.charge.type">
+        <field name="name">Ocean Freight</field>
+        <field name="code">OFR</field>
+        <field name="category">freight</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="charge_type_air_freight" model="freight.charge.type">
+        <field name="name">Air Freight</field>
+        <field name="code">AFR</field>
+        <field name="category">freight</field>
+        <field name="sequence">11</field>
+    </record>
+
+    <record id="charge_type_thc" model="freight.charge.type">
+        <field name="name">Terminal Handling Charge (THC)</field>
+        <field name="code">THC</field>
+        <field name="category">port</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="charge_type_port_clearance" model="freight.charge.type">
+        <field name="name">Port Clearance Fee</field>
+        <field name="code">PCF</field>
+        <field name="category">port</field>
+        <field name="sequence">21</field>
+    </record>
+
+    <record id="charge_type_customs" model="freight.charge.type">
+        <field name="name">Customs Clearance</field>
+        <field name="code">CUS</field>
+        <field name="category">clearance</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="charge_type_duty" model="freight.charge.type">
+        <field name="name">Import Duty &amp; Taxes</field>
+        <field name="code">DTY</field>
+        <field name="category">clearance</field>
+        <field name="sequence">31</field>
+    </record>
+
+    <record id="charge_type_documentation" model="freight.charge.type">
+        <field name="name">Documentation Fee</field>
+        <field name="code">DOC</field>
+        <field name="category">documentation</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="charge_type_handling" model="freight.charge.type">
+        <field name="name">Handling / Cartage</field>
+        <field name="code">HND</field>
+        <field name="category">handling</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="charge_type_insurance" model="freight.charge.type">
+        <field name="name">Cargo Insurance</field>
+        <field name="code">INS</field>
+        <field name="category">insurance</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="charge_type_demurrage" model="freight.charge.type">
+        <field name="name">Demurrage / Detention</field>
+        <field name="code">DEM</field>
+        <field name="category">port</field>
+        <field name="sequence">22</field>
+    </record>
+
+</odoo>

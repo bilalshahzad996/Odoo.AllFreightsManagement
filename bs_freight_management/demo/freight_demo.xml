@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Shipping Lines
+         ================================================================ -->
+
+    <record id="demo_line_maersk" model="freight.shipping.line">
+        <field name="name">Maersk Line</field>
+        <field name="code">MAEU</field>
+        <field name="scac_code">MAEU</field>
+        <field name="transport_mode">sea</field>
+        <field name="free_days">14</field>
+        <field name="demurrage_rate">75.0</field>
+        <field name="tracking_url_template">https://www.maersk.com/tracking/{container}</field>
+    </record>
+
+    <record id="demo_line_msc" model="freight.shipping.line">
+        <field name="name">MSC</field>
+        <field name="code">MSCU</field>
+        <field name="scac_code">MSCU</field>
+        <field name="transport_mode">sea</field>
+        <field name="free_days">14</field>
+        <field name="demurrage_rate">60.0</field>
+        <field name="tracking_url_template">https://www.msc.com/track-a-shipment?agencyPath=mwi&amp;pluginName=trackWithReference&amp;query={container}</field>
+    </record>
+
+    <record id="demo_line_cma" model="freight.shipping.line">
+        <field name="name">CMA CGM</field>
+        <field name="code">CMDU</field>
+        <field name="scac_code">CMDU</field>
+        <field name="transport_mode">sea</field>
+        <field name="free_days">10</field>
+        <field name="demurrage_rate">80.0</field>
+        <field name="tracking_url_template">https://www.cma-cgm.com/ebusiness/tracking/search?SearchBy=Container&amp;Reference={container}</field>
+    </record>
+
+    <!-- ================================================================
+         DEMO 1: Import — Shanghai → Rotterdam, Maersk, In Transit
+         Partners: Acme Corporation (customer), LightsUp (shipper),
+                   Azure Interior (consignee)
+         ================================================================ -->
+
+    <record id="demo_shipment_1" model="freight.shipment">
+        <field name="shipment_type">import</field>
+        <field name="transport_mode">sea</field>
+        <field name="customer_id" ref="base.res_partner_2"/>
+        <field name="shipper_id" ref="base.res_partner_6"/>
+        <field name="consignee_id" ref="base.res_partner_12"/>
+        <field name="shipping_line_id" ref="demo_line_maersk"/>
+        <field name="origin_port_id" ref="port_cnsha"/>
+        <field name="destination_port_id" ref="port_nlrtm"/>
+        <field name="booking_ref">BK-MAEU-2026-001</field>
+        <field name="master_bl">MAEU123456789</field>
+        <field name="etd" eval="(DateTime.now() + timedelta(-18)).strftime('%Y-%m-%d')"/>
+        <field name="eta" eval="(DateTime.now() + timedelta(12)).strftime('%Y-%m-%d')"/>
+        <field name="state">in_transit</field>
+        <field name="notes">Electronics shipment — handle with care. Temperature-sensitive cargo.</field>
+    </record>
+
+    <record id="demo_container_1" model="freight.container">
+        <field name="name">MSKU1234567</field>
+        <field name="container_type">40hc</field>
+        <field name="seal_number">SL998877</field>
+        <field name="shipment_id" ref="demo_shipment_1"/>
+        <field name="package_count">820</field>
+        <field name="gross_weight">21500</field>
+        <field name="volume">62.5</field>
+        <field name="hs_code">8471.30</field>
+        <field name="commodity_description">Laptop Computers and Tablets</field>
+        <field name="tracking_status">in_transit</field>
+    </record>
+
+    <record id="demo_charge_1a" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_1"/>
+        <field name="charge_type_id" ref="charge_type_ocean_freight"/>
+        <field name="name">Ocean Freight CNSHA-NLRTM</field>
+        <field name="amount">1850.0</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="demo_charge_1b" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_1"/>
+        <field name="charge_type_id" ref="charge_type_thc"/>
+        <field name="name">THC Shanghai</field>
+        <field name="amount">185.0</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="demo_charge_1c" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_1"/>
+        <field name="charge_type_id" ref="charge_type_port_clearance"/>
+        <field name="name">Port Clearance Rotterdam</field>
+        <field name="amount">320.0</field>
+        <field name="currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="demo_charge_1d" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_1"/>
+        <field name="charge_type_id" ref="charge_type_documentation"/>
+        <field name="name">Bill of Lading Fee</field>
+        <field name="amount">75.0</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+    <!-- ================================================================
+         DEMO 2: Export — Hamburg → New York, CMA CGM, Booked
+         Partners: Gemini Furniture (customer/shipper),
+                   Ready Mat (consignee)
+         ================================================================ -->
+
+    <record id="demo_shipment_2" model="freight.shipment">
+        <field name="shipment_type">export</field>
+        <field name="transport_mode">sea</field>
+        <field name="customer_id" ref="base.res_partner_3"/>
+        <field name="shipper_id" ref="base.res_partner_3"/>
+        <field name="consignee_id" ref="base.res_partner_4"/>
+        <field name="shipping_line_id" ref="demo_line_cma"/>
+        <field name="origin_port_id" ref="port_DEHAM"/>
+        <field name="destination_port_id" ref="port_USNYC"/>
+        <field name="booking_ref">CMA-2026-HH-NYC-0042</field>
+        <field name="incoterm_id" ref="account.incoterm_CIF"/>
+        <field name="etd" eval="(DateTime.now() + timedelta(5)).strftime('%Y-%m-%d')"/>
+        <field name="eta" eval="(DateTime.now() + timedelta(26)).strftime('%Y-%m-%d')"/>
+        <field name="state">booked</field>
+        <field name="notes">Furniture export. 2 x 40HC containers. CIF New York.</field>
+    </record>
+
+    <record id="demo_container_2a" model="freight.container">
+        <field name="name">CMAU3456789</field>
+        <field name="container_type">40hc</field>
+        <field name="seal_number">SL112233</field>
+        <field name="shipment_id" ref="demo_shipment_2"/>
+        <field name="package_count">240</field>
+        <field name="gross_weight">18700</field>
+        <field name="volume">58.0</field>
+        <field name="hs_code">9403.30</field>
+        <field name="commodity_description">Wooden Office Furniture</field>
+        <field name="customs_value">85000.0</field>
+    </record>
+
+    <record id="demo_container_2b" model="freight.container">
+        <field name="name">CMAU3456790</field>
+        <field name="container_type">40hc</field>
+        <field name="seal_number">SL112244</field>
+        <field name="shipment_id" ref="demo_shipment_2"/>
+        <field name="package_count">180</field>
+        <field name="gross_weight">15200</field>
+        <field name="volume">61.0</field>
+        <field name="hs_code">9403.40</field>
+        <field name="commodity_description">Upholstered Seating</field>
+        <field name="customs_value">62000.0</field>
+    </record>
+
+    <record id="demo_charge_2a" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_2"/>
+        <field name="charge_type_id" ref="charge_type_ocean_freight"/>
+        <field name="name">Ocean Freight DEHAM-USNYC</field>
+        <field name="amount">3200.0</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="demo_charge_2b" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_2"/>
+        <field name="charge_type_id" ref="charge_type_thc"/>
+        <field name="name">THC Hamburg</field>
+        <field name="amount">290.0</field>
+        <field name="currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="demo_charge_2c" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_2"/>
+        <field name="charge_type_id" ref="charge_type_insurance"/>
+        <field name="name">Cargo Insurance (CIF)</field>
+        <field name="amount">450.0</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="demo_charge_2d" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_2"/>
+        <field name="charge_type_id" ref="charge_type_documentation"/>
+        <field name="name">Export Documentation &amp; B/L</field>
+        <field name="amount">120.0</field>
+        <field name="currency_id" ref="base.EUR"/>
+    </record>
+
+    <!-- ================================================================
+         DEMO 3: Import — Singapore → Felixstowe, Maersk, Arrived
+         Partners: Wood Corner (customer/consignee), OpenWood (shipper)
+         Arrived 5 days ago — customs clearance in progress
+         ================================================================ -->
+
+    <record id="demo_shipment_3" model="freight.shipment">
+        <field name="shipment_type">import</field>
+        <field name="transport_mode">sea</field>
+        <field name="customer_id" ref="base.res_partner_1"/>
+        <field name="shipper_id" ref="base.res_partner_5"/>
+        <field name="consignee_id" ref="base.res_partner_1"/>
+        <field name="shipping_line_id" ref="demo_line_maersk"/>
+        <field name="origin_port_id" ref="port_sgsin"/>
+        <field name="destination_port_id" ref="port_gbfxt"/>
+        <field name="booking_ref">BK-MAEU-2026-089</field>
+        <field name="master_bl">MAEU987654321</field>
+        <field name="etd" eval="(DateTime.now() + timedelta(-30)).strftime('%Y-%m-%d')"/>
+        <field name="eta" eval="(DateTime.now() + timedelta(-5)).strftime('%Y-%m-%d')"/>
+        <field name="state">arrived</field>
+        <field name="date_arrived" eval="(DateTime.now() + timedelta(-5)).strftime('%Y-%m-%d')"/>
+        <field name="customs_declaration_no">GB2026-FXT-00445</field>
+        <field name="notes">Timber and wood products from Singapore. Awaiting customs clearance at Felixstowe. CITES documentation attached.</field>
+    </record>
+
+    <record id="demo_container_3a" model="freight.container">
+        <field name="name">MSKU9876543</field>
+        <field name="container_type">40hc</field>
+        <field name="seal_number">SL556677</field>
+        <field name="shipment_id" ref="demo_shipment_3"/>
+        <field name="package_count">340</field>
+        <field name="gross_weight">24800</field>
+        <field name="volume">67.0</field>
+        <field name="hs_code">4407.29</field>
+        <field name="commodity_description">Tropical Hardwood Lumber</field>
+        <field name="country_of_origin_id" ref="base.sg"/>
+        <field name="customs_value">48000.0</field>
+        <field name="tracking_status">arrived</field>
+    </record>
+
+    <record id="demo_container_3b" model="freight.container">
+        <field name="name">MSKU9876544</field>
+        <field name="container_type">20gp</field>
+        <field name="seal_number">SL556688</field>
+        <field name="shipment_id" ref="demo_shipment_3"/>
+        <field name="package_count">180</field>
+        <field name="gross_weight">18200</field>
+        <field name="volume">28.0</field>
+        <field name="hs_code">4418.20</field>
+        <field name="commodity_description">Engineered Wood Flooring</field>
+        <field name="country_of_origin_id" ref="base.sg"/>
+        <field name="customs_value">31000.0</field>
+        <field name="tracking_status">arrived</field>
+    </record>
+
+    <record id="demo_charge_3a" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_3"/>
+        <field name="charge_type_id" ref="charge_type_ocean_freight"/>
+        <field name="name">Ocean Freight SGSIN-GBFXT</field>
+        <field name="amount">2750.0</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="demo_charge_3b" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_3"/>
+        <field name="charge_type_id" ref="charge_type_thc"/>
+        <field name="name">THC Felixstowe</field>
+        <field name="amount">310.0</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="demo_charge_3c" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_3"/>
+        <field name="charge_type_id" ref="charge_type_customs"/>
+        <field name="name">Customs Clearance &amp; Agency</field>
+        <field name="amount">280.0</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="demo_charge_3d" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_3"/>
+        <field name="charge_type_id" ref="charge_type_duty"/>
+        <field name="name">Import Duty (0%)</field>
+        <field name="amount">0.0</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="demo_charge_3e" model="freight.charge">
+        <field name="shipment_id" ref="demo_shipment_3"/>
+        <field name="charge_type_id" ref="charge_type_handling"/>
+        <field name="name">Port Handling &amp; Cartage</field>
+        <field name="amount">195.0</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+</odoo>

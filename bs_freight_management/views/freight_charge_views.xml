@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_freight_charge_list" model="ir.ui.view">
+        <field name="name">freight.charge.list</field>
+        <field name="model">freight.charge</field>
+        <field name="arch" type="xml">
+            <list string="Charges">
+                <field name="shipment_id"/>
+                <field name="date"/>
+                <field name="charge_type_id"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="amount"/>
+                <field name="currency_id"/>
+                <field name="amount_company" string="Company Currency"/>
+                <field name="company_currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_freight_charge_search" model="ir.ui.view">
+        <field name="name">freight.charge.search</field>
+        <field name="model">freight.charge</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="shipment_id"/>
+                <field name="charge_type_id"/>
+                <field name="partner_id"/>
+                <group>
+                    <filter name="group_shipment" string="Shipment"
+                            context="{'group_by': 'shipment_id'}"/>
+                    <filter name="group_type" string="Charge Type"
+                            context="{'group_by': 'charge_type_id'}"/>
+                    <filter name="group_vendor" string="Vendor"
+                            context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_freight_charge_form" model="ir.ui.view">
+        <field name="name">freight.charge.form</field>
+        <field name="model">freight.charge</field>
+        <field name="arch" type="xml">
+            <form string="Charge">
+                <sheet>
+                    <group>
+                        <group string="Charge Details">
+                            <field name="shipment_id"/>
+                            <field name="charge_type_id"/>
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group string="Amount">
+                            <field name="currency_id"/>
+                            <field name="amount"/>
+                            <field name="company_currency_id" invisible="1"/>
+                            <field name="amount_company" string="Amount (Company Currency)"
+                                   readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_freight_charge" model="ir.actions.act_window">
+        <field name="name">Charges</field>
+        <field name="res_model">freight.charge</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No charges yet</p>
+            <p>Charges are created from shipment records.</p>
+        </field>
+    </record>
+
+</odoo>

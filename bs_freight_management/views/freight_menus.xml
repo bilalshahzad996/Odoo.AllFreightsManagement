@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_freight_root"
+              name="Freight"
+              web_icon="freight_forwarding,static/description/icon.png"
+              sequence="55"
+              groups="group_freight_user"/>
+
+    <menuitem id="menu_freight_operations"
+              name="Operations"
+              parent="menu_freight_root"
+              sequence="10"/>
+
+    <menuitem id="menu_freight_shipment"
+              name="Shipments"
+              parent="menu_freight_operations"
+              action="action_freight_shipment"
+              sequence="10"/>
+
+    <menuitem id="menu_freight_container"
+              name="Containers"
+              parent="menu_freight_operations"
+              action="action_freight_container"
+              sequence="20"/>
+
+    <menuitem id="menu_freight_charge"
+              name="Charges"
+              parent="menu_freight_operations"
+              action="action_freight_charge"
+              sequence="30"/>
+
+    <menuitem id="menu_freight_shipment_leg"
+              name="Shipment Legs"
+              parent="menu_freight_operations"
+              action="action_freight_shipment_leg"
+              sequence="40"/>
+
+    <menuitem id="menu_freight_config"
+              name="Configuration"
+              parent="menu_freight_root"
+              sequence="90"
+              groups="group_freight_manager"/>
+
+    <menuitem id="menu_freight_shipping_line"
+              name="Shipping Lines"
+              parent="menu_freight_config"
+              action="action_freight_shipping_line"
+              sequence="10"/>
+
+    <menuitem id="menu_freight_port"
+              name="Ports"
+              parent="menu_freight_config"
+              action="action_freight_port"
+              sequence="20"/>
+
+    <menuitem id="menu_freight_charge_type"
+              name="Charge Types"
+              parent="menu_freight_config"
+              action="action_freight_charge_type"
+              sequence="30"/>
+
+    <menuitem id="menu_freight_tariff"
+              name="Tariff Rates"
+              parent="menu_freight_config"
+              action="action_freight_tariff"
+              sequence="40"/>
+
+</odoo>

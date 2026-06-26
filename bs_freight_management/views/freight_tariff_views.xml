@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_freight_tariff_list" model="ir.ui.view">
+        <field name="name">freight.tariff.list</field>
+        <field name="model">freight.tariff</field>
+        <field name="arch" type="xml">
+            <list string="Tariff Rates">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="shipping_line_id"/>
+                <field name="origin_port_id"/>
+                <field name="destination_port_id"/>
+                <field name="transport_mode"/>
+                <field name="charge_type_id"/>
+                <field name="container_type"/>
+                <field name="rate"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="valid_from"/>
+                <field name="valid_to"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_freight_tariff_form" model="ir.ui.view">
+        <field name="name">freight.tariff.form</field>
+        <field name="model">freight.tariff</field>
+        <field name="arch" type="xml">
+            <form string="Tariff Rate">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. FCL Ocean Freight - CNSHA to PKKHH"/></h1>
+                    </div>
+                    <group>
+                        <group string="Route">
+                            <field name="shipping_line_id"/>
+                            <field name="transport_mode"/>
+                            <field name="origin_port_id"/>
+                            <field name="destination_port_id"/>
+                            <field name="container_type"/>
+                        </group>
+                        <group string="Rate">
+                            <field name="charge_type_id"/>
+                            <field name="currency_id"/>
+                            <field name="rate"/>
+                            <field name="valid_from"/>
+                            <field name="valid_to"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" placeholder="Additional conditions or notes..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_freight_tariff_search" model="ir.ui.view">
+        <field name="name">freight.tariff.search</field>
+        <field name="model">freight.tariff</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="shipping_line_id"/>
+                <field name="origin_port_id"/>
+                <field name="destination_port_id"/>
+                <field name="charge_type_id"/>
+                <separator/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="sea" string="Sea" domain="[('transport_mode', '=', 'sea')]"/>
+                <filter name="air" string="Air" domain="[('transport_mode', '=', 'air')]"/>
+                <group>
+                    <filter name="group_line" string="Carrier"
+                            context="{'group_by': 'shipping_line_id'}"/>
+                    <filter name="group_mode" string="Mode"
+                            context="{'group_by': 'transport_mode'}"/>
+                    <filter name="group_charge" string="Charge Type"
+                            context="{'group_by': 'charge_type_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_freight_tariff" model="ir.actions.act_window">
+        <field name="name">Tariff Rates</field>
+        <field name="res_model">freight.tariff</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_freight_tariff_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your first tariff rate
+            </p>
+            <p>
+                Define rate cards per route and carrier.
+                Use "Apply Tariff Rates" on a shipment to create charges automatically.
+            </p>
+        </field>
+    </record>
+
+</odoo>

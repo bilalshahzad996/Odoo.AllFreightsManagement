@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_freight_port_list" model="ir.ui.view">
+        <field name="name">freight.port.list</field>
+        <field name="model">freight.port</field>
+        <field name="arch" type="xml">
+            <list string="Ports" editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="country_id"/>
+                <field name="port_type"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_freight_port_form" model="ir.ui.view">
+        <field name="name">freight.port.form</field>
+        <field name="model">freight.port</field>
+        <field name="arch" type="xml">
+            <form string="Port">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Shanghai"/></h1>
+                    </div>
+                    <group>
+                        <field name="code"/>
+                        <field name="country_id"/>
+                        <field name="port_type"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_freight_port_search" model="ir.ui.view">
+        <field name="name">freight.port.search</field>
+        <field name="model">freight.port</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="country_id"/>
+                <filter name="seaport" string="Seaports"
+                        domain="[('port_type', '=', 'sea')]"/>
+                <filter name="airport" string="Airports"
+                        domain="[('port_type', '=', 'air')]"/>
+                <group>
+                    <filter name="group_country" string="Country"
+                            context="{'group_by': 'country_id'}"/>
+                    <filter name="group_type" string="Type"
+                            context="{'group_by': 'port_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_freight_port" model="ir.actions.act_window">
+        <field name="name">Ports</field>
+        <field name="res_model">freight.port</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No ports configured</p>
+            <p>Add sea ports and airports used in your shipping routes.</p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="mail_template_freight_state_notification" model="mail.template">
+            <field name="name">Freight: Shipment Status Notification</field>
+            <field name="model_id" ref="model_freight_shipment"/>
+            <field name="subject">Shipment {{ object.name }} — {% if object.state == 'booked' %}Booking Confirmed{% elif object.state == 'in_transit' %}Departed / In Transit{% elif object.state == 'arrived' %}Arrived at Destination{% elif object.state == 'cleared' %}Customs Cleared{% elif object.state == 'delivered' %}Delivered{% elif object.state == 'cancelled' %}Shipment Cancelled{% else %}Status Update{% endif %}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email or '') }}</field>
+            <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif; font-size: 14px; color: #333; max-width: 680px; margin: 0 auto;">
+
+    <!-- Header bar -->
+    <div style="background: #1a5276; padding: 20px 24px; border-radius: 4px 4px 0 0;">
+        <h2 style="color: #fff; margin: 0; font-size: 18px;">{{ object.company_id.name }}</h2>
+        <p style="color: #aed6f1; margin: 4px 0 0 0; font-size: 13px;">Shipment Status Notification</p>
+    </div>
+
+    <!-- Status banner -->
+    <div style="padding: 16px 24px; border-left: 4px solid
+        {% if object.state == 'booked' %}#2196f3
+        {% elif object.state == 'in_transit' %}#ff9800
+        {% elif object.state == 'arrived' %}#4caf50
+        {% elif object.state == 'cleared' %}#009688
+        {% elif object.state == 'delivered' %}#4caf50
+        {% elif object.state == 'cancelled' %}#f44336
+        {% else %}#9e9e9e{% endif %};
+        background: #f9f9f9; margin: 0;">
+        <p style="margin: 0; font-size: 13px; color: #666;">Current Status</p>
+        <p style="margin: 4px 0 0 0; font-size: 20px; font-weight: bold; color:
+            {% if object.state == 'booked' %}#1565c0
+            {% elif object.state == 'in_transit' %}#e65100
+            {% elif object.state == 'arrived' %}#2e7d32
+            {% elif object.state == 'cleared' %}#00695c
+            {% elif object.state == 'delivered' %}#1b5e20
+            {% elif object.state == 'cancelled' %}#b71c1c
+            {% else %}#424242{% endif %};">
+            {% if object.state == 'booked' %}&#10003; Booking Confirmed
+            {% elif object.state == 'in_transit' %}&#9992; Departed / In Transit
+            {% elif object.state == 'arrived' %}&#128649; Arrived at Destination
+            {% elif object.state == 'cleared' %}&#128196; Customs Cleared
+            {% elif object.state == 'delivered' %}&#9989; Delivered
+            {% elif object.state == 'cancelled' %}&#10005; Shipment Cancelled
+            {% else %}Status Updated{% endif %}
+        </p>
+    </div>
+
+    <!-- Body -->
+    <div style="padding: 24px;">
+        <p>Dear valued customer,</p>
+        <p>
+            We are writing to inform you that the status of your shipment
+            <strong>{{ object.name }}</strong> has been updated.
+        </p>
+
+        <!-- Shipment details table -->
+        <table style="border-collapse: collapse; width: 100%; margin: 16px 0;">
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; width: 220px; border: 1px solid #e0e0e0;">Shipment Reference</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;"><strong>{{ object.name }}</strong></td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">Type</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;">{{ object.shipment_type | title }} / {{ object.transport_mode | title }}</td>
+            </tr>
+            {% if object.origin_port_id %}
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">Origin Port</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;">{{ object.origin_port_id.name }}{% if object.origin_port_id.code %} ({{ object.origin_port_id.code }}){% endif %}</td>
+            </tr>
+            {% endif %}
+            {% if object.destination_port_id %}
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">Destination Port</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;">{{ object.destination_port_id.name }}{% if object.destination_port_id.code %} ({{ object.destination_port_id.code }}){% endif %}</td>
+            </tr>
+            {% endif %}
+            {% if object.shipping_line_id %}
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">Carrier</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;">{{ object.shipping_line_id.name }}</td>
+            </tr>
+            {% endif %}
+            {% if object.etd %}
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">ETD</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;">{{ object.etd }}</td>
+            </tr>
+            {% endif %}
+            {% if object.eta %}
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">ETA</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;"><strong>{{ object.eta }}</strong></td>
+            </tr>
+            {% endif %}
+            {% if object.booking_ref %}
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">Booking Reference</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;">{{ object.booking_ref }}</td>
+            </tr>
+            {% endif %}
+            {% if object.master_bl %}
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">Master B/L</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;">{{ object.master_bl }}</td>
+            </tr>
+            {% endif %}
+            {% if object.date_arrived %}
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">Actual Arrival</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;">{{ object.date_arrived }}</td>
+            </tr>
+            {% endif %}
+            {% if object.date_delivered %}
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">Delivered On</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;">{{ object.date_delivered }}</td>
+            </tr>
+            {% endif %}
+            {% if object.customs_declaration_no %}
+            <tr>
+                <td style="padding: 8px 12px; background: #f5f5f5; font-weight: bold; border: 1px solid #e0e0e0;">Customs Declaration No.</td>
+                <td style="padding: 8px 12px; border: 1px solid #e0e0e0;">{{ object.customs_declaration_no }}</td>
+            </tr>
+            {% endif %}
+        </table>
+
+        {% if object.container_count %}
+        <p style="margin-top: 8px; color: #555; font-size: 13px;">
+            <strong>Containers:</strong> {{ object.container_count }} unit(s) on this shipment.
+        </p>
+        {% endif %}
+
+        <p style="margin-top: 20px;">
+            If you have any questions regarding this shipment, please do not hesitate to contact us.
+        </p>
+
+        <p>
+            Kind regards,<br/>
+            <strong>{{ object.company_id.name }}</strong><br/>
+            {% if object.company_id.phone %}{{ object.company_id.phone }}<br/>{% endif %}
+            {% if object.company_id.email %}{{ object.company_id.email }}{% endif %}
+        </p>
+    </div>
+
+    <!-- Footer -->
+    <div style="background: #f5f5f5; padding: 12px 24px; border-top: 1px solid #e0e0e0; font-size: 11px; color: #999; border-radius: 0 0 4px 4px;">
+        This is an automated notification from {{ object.company_id.name }}. Please do not reply to this email.
+    </div>
+
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

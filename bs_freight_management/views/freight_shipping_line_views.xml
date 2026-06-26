@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_freight_shipping_line_list" model="ir.ui.view">
+        <field name="name">freight.shipping.line.list</field>
+        <field name="model">freight.shipping.line</field>
+        <field name="arch" type="xml">
+            <list string="Shipping Lines">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="scac_code"/>
+                <field name="transport_mode"/>
+                <field name="partner_id"/>
+                <field name="shipment_count" string="Shipments"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_freight_shipping_line_form" model="ir.ui.view">
+        <field name="name">freight.shipping.line.form</field>
+        <field name="model">freight.shipping.line</field>
+        <field name="arch" type="xml">
+            <form string="Shipping Line">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_shipments" type="object"
+                                class="oe_stat_button" icon="fa-ship">
+                            <field name="shipment_count" widget="statinfo"
+                                   string="Shipments"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Maersk Line"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="scac_code"/>
+                            <field name="transport_mode"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="website" widget="url"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Demurrage Settings">
+                        <group>
+                            <field name="free_days"/>
+                            <field name="currency_id"/>
+                        </group>
+                        <group>
+                            <field name="demurrage_rate"/>
+                        </group>
+                    </group>
+                    <group string="Container Tracking">
+                        <field name="tracking_url_template" placeholder="https://example.com/track/{container}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_freight_shipping_line" model="ir.actions.act_window">
+        <field name="name">Shipping Lines</field>
+        <field name="res_model">freight.shipping.line</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
