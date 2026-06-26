@@ -1,7 +1,6 @@
 {
     'name': 'Supply Chain & Freight Management',
     'version': '19.0.3.0.0',
-    'category': 'Inventory/Freight',
     'summary': 'Manage import/export shipments: containers, shipping lines, '
                'port clearance fees and multi-currency expenses.',
     'description': """
@@ -31,7 +30,8 @@ businesses:
     'author': 'DevFlow',
     'price': '125',
     'currency': 'USD',
-    'maintainer': 'DevFlow'.
+    'maintainer': 'DevFlow',
+    'category': 'Inventory/Freight',
     'depends': ['mail', 'contacts', 'account', 'base_setup'],
     'data': [
         'security/freight_security.xml',
