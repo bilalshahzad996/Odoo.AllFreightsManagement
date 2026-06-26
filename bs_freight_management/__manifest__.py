@@ -28,7 +28,10 @@ businesses:
 * ETA approaching email notification (3-day warning via scheduled cron)
 * KPI graph and pivot views
 """,
-    'author': 'Bilal Shahzad',
+    'author': 'DevFlow',
+    'price': '125',
+    'currency': 'USD',
+    'maintainer': 'DevFlow'.
     'license': 'LGPL-3',
     'depends': ['mail', 'contacts', 'account', 'base_setup'],
     'data': [
