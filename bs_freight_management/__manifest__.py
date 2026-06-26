@@ -32,7 +32,6 @@ businesses:
     'price': '125',
     'currency': 'USD',
     'maintainer': 'DevFlow'.
-    'license': 'LGPL-3',
     'depends': ['mail', 'contacts', 'account', 'base_setup'],
     'data': [
         'security/freight_security.xml',
@@ -56,9 +55,12 @@ businesses:
         'views/res_config_settings_views.xml',
         'report/freight_shipment_report.xml',
     ],
+'images': ['static/description/icon.png'],
     'demo': [
         'demo/freight_demo.xml',
     ],
     'application': True,
     'installable': True,
+    'license': 'LGPL-3',
+
 }
