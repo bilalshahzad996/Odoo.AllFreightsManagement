@@ -1,5 +1,5 @@
 {
-    'name': 'Supply Chain & Freight Forwarding',
+    'name': 'Supply Chain & Freight Management',
     'version': '19.0.3.0.0',
     'category': 'Inventory/Freight',
     'summary': 'Manage import/export shipments: containers, shipping lines, '
